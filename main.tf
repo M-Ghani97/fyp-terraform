@@ -31,7 +31,7 @@ resource "aws_security_group" "openstack" {
 }
 
 resource "aws_instance" "controller" {
-  count                  = 1
+  count                  = 2
   ami                    = var.ubuntu_ami
   instance_type          = "t3.large"
   key_name               = "default-ec2"
