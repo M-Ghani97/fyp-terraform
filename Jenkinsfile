@@ -1,5 +1,5 @@
-// // Jenkinsfile
-// String credentialsId = 'awsCredentials'
+// Jenkinsfile
+String credentialsId = 'awsCredentials'
 
 // try {
 //   agent {
