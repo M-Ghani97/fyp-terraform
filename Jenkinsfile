@@ -15,7 +15,7 @@
 //     }
 //   }
 
-//   // Run terraform init
+  // Run terraform init
 //   stage('init') {
 //     node {
 //       withCredentials([[
@@ -113,15 +113,22 @@ pipeline {
     }
     stage('Terraform Init') { 
       steps {
-        sh 'terraform init ' 
+        ansiColor('xterm') {
+          sh 'terraform init'
+        }
       }
     }
     stage('Terraform Plan') {
-            steps {
-                withAWS(credentials: 'awsCredentials') {
-                    sh 'terraform plan'
-                }
-            }
+      withCredentials([[
+        $class: 'AmazonWebServicesCredentialsBinding',
+        credentialsId: credentialsId,
+        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+      ]]) {
+        ansiColor('xterm') {
+          sh 'terraform plan'
         }
+      }
+    }
   }
 }
