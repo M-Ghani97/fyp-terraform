@@ -102,6 +102,7 @@ pipeline {
   agent {
     docker {
       image 'hashicorp/terraform'
+      args '--entrypoint='
     }
   }
   stages {
@@ -112,8 +113,15 @@ pipeline {
     }
     stage('Terraform Init') { 
       steps {
-        echo 'terraform init ' 
+        sh 'terraform init ' 
       }
     }
+    stage('Terraform Plan') {
+            steps {
+                withAWS(credentials: 'awsCredentials') {
+                    sh 'terraform plan'
+                }
+            }
+        }
   }
 }
