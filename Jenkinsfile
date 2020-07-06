@@ -112,7 +112,7 @@ pipeline {
     }
     stage('Terraform Init') { 
       steps {
-        sh 'terraform init ' 
+        echo 'terraform init ' 
       }
     }
   }
