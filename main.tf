@@ -8,9 +8,9 @@ resource "aws_default_vpc" "default" {
   }
 }
 
-resource "aws_security_group" "openstack" {
-  name        = "openstack"
-  description = "OPENSTack"
+resource "aws_security_group" "Allow_ALL" {
+  name        = "Allow_ALL"
+  description = "Allow_ALL"
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
@@ -33,10 +33,10 @@ resource "aws_security_group" "openstack" {
 resource "aws_instance" "controller" {
   count                  = 2
   ami                    = var.ubuntu_ami
-  instance_type          = "t3.large"
+  instance_type          = "t2.large"
   key_name               = "default-ec2"
   subnet_id              = tolist(data.aws_subnet_ids.default.ids)[0]
-  vpc_security_group_ids = [aws_security_group.openstack.id]
+  vpc_security_group_ids = [aws_security_group.Allow_ALL.id]
   tags = {
     Name = var.node_name[count.index]
   }
@@ -45,7 +45,7 @@ resource "aws_instance" "controller" {
 resource "aws_network_interface" "test" {
   count = 2
   subnet_id       = tolist(data.aws_subnet_ids.default.ids)[0]
-  security_groups = ["${aws_security_group.openstack.id}"]
+  security_groups = ["${aws_security_group.Allow_ALL.id}"]
 
   attachment {
     instance     = aws_instance.controller[count.index].id
